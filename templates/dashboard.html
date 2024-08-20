@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Task Manager</h1>
+    </header>
+    <main>
+        <div class="board">
+            <div class="column" id="todo">
+                <h2>Todo</h2>
+                <div class="task-list" id="todo-tasks">
+                </div>
+            </div>
+            <div class="column" id="inprogress">
+                <h2>In Progress</h2>
+                <div class="task-list" id="inprogress-tasks">
+                </div>
+            </div>
+            <div class="column" id="done">
+                <h2>Done</h2>
+                <div class="task-list" id="done-tasks">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="taskDetailsModal" class="modal">
+    <div class="modal-content">
+        <input type="hidden" id="loggedInUserName" value="{{ user.username }}">
+        <span class="close-btn">&times;</span>
+        <h3 id="taskTitle" class="highlighted-title" onclick="makeTitleEditable()"></h3>
+        <input type="text" id="editTitleInput" style="display: none;">
+        <button id="btnUpdateTitle" style="display: none;" onclick="updateTaskTitle()">Update</button>
+        <input type="hidden" id="taskId" value="">
+        <p id="taskDescription" onclick="makeDescriptionEditable()"></p>
+        <textarea id="editDescriptionInput" style="display: none;"></textarea>
+        <button id="btnUpdateDescription" style="display: none;" onclick="updateTaskDescription()">Update Description</button>
+        <p><strong>Due Date:</strong> <span id="taskDueDate"></span></p>
+        <p><strong>Status:</strong> <span id="taskStatus" class="status" onclick="openStatusDropdown()"></span></p>
+        <div id="statusDropdown" class="dropdown-content">
+            <a onclick="updateTaskStatus('Todo')">Todo</a>
+            <a onclick="updateTaskStatus('Inprogress')">Inprogress</a>
+            <a onclick="updateTaskStatus('Complete')">Complete</a>
+        </div>
+        <p><strong>Created By:</strong> <span id="taskCreatedBy"></span></p>
+        <p><strong>Created At:</strong> <span id="taskCreatedAt"></span></p>
+        <p><strong>Updated At:</strong> <span id="taskUpdatedAt"></span></p>
+
+        <h4>Members</h4>
+        <ul id="taskMembers">
+        </ul>
+        <button id="btnAddMember" class="btn-add-member">Add Member</button>
+        <div id="userListModal" class="modal" style="display: none;">
+            <select id="userList">
+            </select>
+            <button id="confirmAddUserBtn">Add User</button>
+        </div>
+
+        <h4>Comments</h4>
+        <ul id="taskComments">
+        </ul>
+        <textarea id="newComment" placeholder="Add a comment..."></textarea>
+        <button id="btnAddComment" class="btn-add-comment">Add Comment</button>
+        <br>
+        <button id="btnDeleteTask" class="btn-delete-task">Delete Task</button>
+    </div>
+    </div>
+
+
+    <div id="addTaskModal" class="modal">
+        <div class="modal-content form-modal">
+            <span class="close-btn">&times;</span>
+            <h3 class="modal-title">Add New Task</h3>
+            <form id="addTaskForm">
+                <div class="form-group">
+                    <label for="taskTitleInput">Title:</label>
+                    <input type="text" id="taskTitleInput" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="taskDescriptionInput">Description:</label>
+                    <textarea id="taskDescriptionInput" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="taskDueDateInput">Due Date:</label>
+                    <input type="date" id="taskDueDateInput" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="taskStatusInput">Status:</label>
+                    <select id="taskStatusInput" class="form-control">
+                        <option value="Todo">Todo</option>
+                        <option value="Inprogress">Inprogress</option>
+                        <option value="Complete">Complete</option>
+                    </select>
+                </div>
+                <button type="button" id="saveTaskBtn" class="btn btn-primary">Save Task</button>
+            </form>
+        </div>
+    </div>
+    <button class="fab-add-task" onclick="openAddTaskModal()">+</button>
+    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="fab-logout"><i class="fas fa-sign-out-alt"></i>
+        </button>
+    </form>
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

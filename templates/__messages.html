@@ -1,0 +1,7 @@
+{% if messages %}
+  <ul class="messages">
+  {% for message in messages %}
+    <li class="text-{% if 'error' in message.tags %}red{% elif 'warning' in message.tags %}yellow{% else %}green{% endif %}" style="list-style-type: none;">{{ message|safe }}</li>
+  {% endfor %}
+  </ul>
+{% endif %}
